@@ -12,228 +12,124 @@
   </head>
   <body>
     <div class="app-shell">
-      <aside class="sidebar" aria-label="Painel de hábitos">
-        <div class="brand-block">
-          <div class="brand-mark" aria-hidden="true">
+      <header class="topbar">
+        <a class="brand-lockup" href="#forest-title" aria-label="Forest Roads">
+          <span class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="img">
               <path d="M23 43c-7-7-12-14-12-22 0-9 5-16 13-16s13 7 13 16c0 8-5 15-12 22l-1 1-1-1Z" />
               <path d="M24 37V13M24 25c-4-1-8-4-10-8M24 29c5-1 9-5 11-10" />
             </svg>
-          </div>
-          <div>
-            <p class="eyebrow">Forest Roads</p>
-            <h1>Hábitos viram caminhos.</h1>
-          </div>
-        </div>
+          </span>
+          <span>
+            <strong>Forest Roads</strong>
+            <small>Hábitos viram caminhos</small>
+          </span>
+        </a>
 
-        <section class="auth-panel" aria-labelledby="account-title">
-          <div class="account-row">
-            <div>
-              <p class="eyebrow">Conta</p>
-              <h2 id="account-title">Sincronização</h2>
-            </div>
-            <span id="syncBadge" class="sync-badge is-local">Local</span>
-          </div>
+        <nav class="top-actions" aria-label="Ações principais">
+          <button id="newHabitButton" class="primary-button" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            Novo hábito
+          </button>
 
-          <div class="account-profile">
-            <div id="accountAvatar" class="account-avatar" aria-hidden="true">FR</div>
-            <div>
-              <strong id="accountName">Modo local</strong>
-              <span id="accountEmail">Configure Firebase para entrar com Google.</span>
-            </div>
-          </div>
-
-          <div class="account-actions">
-            <button id="googleSignInButton" class="auth-button" type="button">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M21.35 11.1H12v3.8h5.36c-.24 1.24-.96 2.28-2.04 2.96v2.46h3.3c1.94-1.78 3.06-4.4 3.06-7.5 0-.58-.05-1.14-.33-1.72Z" />
-                <path d="M12 22c2.76 0 5.08-.9 6.78-2.45l-3.3-2.46c-.92.6-2.08.96-3.48.96-2.67 0-4.93-1.73-5.74-4.06H2.85v2.54A10.2 10.2 0 0 0 12 22Z" />
-                <path d="M6.26 13.99A5.87 5.87 0 0 1 5.94 12c0-.7.12-1.37.32-1.99V7.47H2.85A9.74 9.74 0 0 0 1.8 12c0 1.63.38 3.18 1.05 4.53l3.41-2.54Z" />
-                <path d="M12 5.95c1.5 0 2.85.5 3.91 1.49l2.93-2.8C17.07 3.02 14.76 2 12 2a10.2 10.2 0 0 0-9.15 5.47l3.41 2.54C7.07 7.68 9.33 5.95 12 5.95Z" />
-              </svg>
-              Entrar com Google
+          <div class="profile-menu">
+            <button id="profileButton" class="profile-button" type="button" aria-label="Abrir perfil" aria-expanded="false">
+              <span id="accountAvatar" class="account-avatar" aria-hidden="true">FR</span>
             </button>
-            <button id="syncLocalButton" class="ghost-button compact" type="button" hidden>Enviar local</button>
-            <button id="signOutButton" class="ghost-button compact" type="button" hidden>Sair</button>
-          </div>
-
-          <p id="syncStatus" class="sync-status">Dados salvos neste navegador.</p>
-        </section>
-
-        <section class="control-panel" aria-labelledby="daily-title">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Diário</p>
-              <h2 id="daily-title">Controle do dia</h2>
+            <div id="profilePopover" class="profile-popover" hidden>
+              <div class="account-row">
+                <div>
+                  <p class="eyebrow">Conta</p>
+                  <h2 id="account-title">Sincronização</h2>
+                </div>
+                <span id="syncBadge" class="sync-badge is-local">Local</span>
+              </div>
+              <div class="account-profile">
+                <div>
+                  <strong id="accountName">Modo local</strong>
+                  <span id="accountEmail">Configure Firebase para entrar com Google.</span>
+                </div>
+              </div>
+              <p id="syncStatus" class="sync-status">Dados salvos neste navegador.</p>
+              <div class="account-actions">
+                <button id="googleSignInButton" class="auth-button" type="button">
+                  Entrar com Google
+                </button>
+                <button id="syncLocalButton" class="ghost-button compact" type="button" hidden>Enviar local</button>
+                <button id="signOutButton" class="ghost-button compact" type="button" hidden>Sair</button>
+              </div>
             </div>
-            <input id="journalDate" class="date-input" type="date" aria-label="Dia do diário" />
           </div>
-          <div id="todayList" class="today-list" aria-live="polite"></div>
-        </section>
-
-        <section class="control-panel" aria-labelledby="habits-title">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Rotas</p>
-              <h2 id="habits-title">Hábitos ativos</h2>
-            </div>
-            <button id="newHabitButton" class="icon-button" type="button" aria-label="Novo hábito" title="Novo hábito">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-            </button>
-          </div>
-          <div id="habitList" class="habit-list"></div>
-        </section>
-      </aside>
+        </nav>
+      </header>
 
       <main class="workspace">
-        <section class="forest-stage" aria-labelledby="forest-title">
-          <div class="forest-toolbar">
-            <div>
-              <p class="eyebrow">Mapa procedural</p>
-              <h2 id="forest-title">Floresta neural</h2>
+        <section class="forest-panel" aria-labelledby="forest-title">
+          <div class="forest-stage">
+            <div class="forest-toolbar">
+              <div>
+                <p class="eyebrow">Mapa neural</p>
+                <h1 id="forest-title">Floresta de hábitos</h1>
+              </div>
+              <div class="view-tabs" role="tablist" aria-label="Modo do mapa">
+                <button class="tab-button is-active" type="button" data-view="selected">Hábito atual</button>
+                <button class="tab-button" type="button" data-view="overview">Todas as rotas</button>
+              </div>
             </div>
-            <div class="view-tabs" role="tablist" aria-label="Visualização da floresta">
-              <button class="tab-button is-active" type="button" data-view="selected">Estrada</button>
-              <button class="tab-button" type="button" data-view="overview">Bosque</button>
-            </div>
+            <canvas id="forestCanvas" aria-label="Visualização procedural da floresta e das estradas de hábitos"></canvas>
+            <div class="forest-hud" id="forestHud"></div>
           </div>
-          <canvas id="forestCanvas" aria-label="Visualização procedural da floresta e das estradas de hábitos"></canvas>
-          <div class="forest-hud" id="forestHud"></div>
+
+          <section class="insight-row" aria-label="Resumo de progresso">
+            <article class="metric-panel">
+              <span class="metric-label">Força neural</span>
+              <strong id="strengthMetric">0%</strong>
+              <span id="strengthCaption">Sem trilha ativa</span>
+            </article>
+            <article class="metric-panel">
+              <span class="metric-label">Sequência</span>
+              <strong id="streakMetric">0 dias</strong>
+              <span id="streakCaption">Consistência atual</span>
+            </article>
+            <article class="metric-panel">
+              <span class="metric-label">Repetições</span>
+              <strong id="repetitionMetric">0</strong>
+              <span id="repetitionCaption">Rumo à automação</span>
+            </article>
+            <article class="metric-panel">
+              <span class="metric-label">Mata fechando</span>
+              <strong id="decayMetric">0%</strong>
+              <span id="decayCaption">Pressão por pausas</span>
+            </article>
+          </section>
         </section>
 
-        <section class="insight-row" aria-label="Resumo de progresso">
-          <article class="metric-panel">
-            <span class="metric-label">Força neural</span>
-            <strong id="strengthMetric">0%</strong>
-            <span id="strengthCaption">Sem trilha ativa</span>
-          </article>
-          <article class="metric-panel">
-            <span class="metric-label">Sequência</span>
-            <strong id="streakMetric">0 dias</strong>
-            <span id="streakCaption">Consistência atual</span>
-          </article>
-          <article class="metric-panel">
-            <span class="metric-label">Repetições</span>
-            <strong id="repetitionMetric">0</strong>
-            <span id="repetitionCaption">Rumo à automação</span>
-          </article>
-          <article class="metric-panel">
-            <span class="metric-label">Mata fechando</span>
-            <strong id="decayMetric">0%</strong>
-            <span id="decayCaption">Pressão por pausas</span>
-          </article>
-        </section>
-
-        <section class="lower-grid">
-          <article class="builder-panel" aria-labelledby="builder-title">
+        <aside class="side-panel" aria-label="Controle de hábitos">
+          <section class="control-panel" aria-labelledby="daily-title">
             <div class="section-heading">
               <div>
-                <p class="eyebrow">Arquitetura do loop</p>
-                <h2 id="builder-title">Criador de hábito</h2>
+                <p class="eyebrow">Hoje</p>
+                <h2 id="daily-title">Check-ins</h2>
               </div>
-              <button id="deleteHabitButton" class="ghost-button danger" type="button">Excluir</button>
+              <input id="journalDate" class="date-input" type="date" aria-label="Dia do diário" />
             </div>
+            <div id="todayList" class="today-list" aria-live="polite"></div>
+          </section>
 
-            <form id="habitForm" class="habit-form">
-              <label class="field-group">
-                <span>Nome do hábito</span>
-                <input id="habitName" name="name" type="text" maxlength="48" required placeholder="Ex.: Ler 10 páginas" />
-              </label>
-
-              <div class="form-grid two">
-                <label class="field-group">
-                  <span>Área</span>
-                  <select id="habitArea" name="area">
-                    <option value="corpo">Corpo</option>
-                    <option value="mente">Mente</option>
-                    <option value="foco">Foco</option>
-                    <option value="estudo">Estudo</option>
-                    <option value="social">Social</option>
-                    <option value="casa">Casa</option>
-                  </select>
-                </label>
-
-                <label class="field-group">
-                  <span>Cor da rota</span>
-                  <input id="habitColor" name="color" type="color" value="#d28a3c" />
-                </label>
+          <section class="control-panel habit-section" aria-labelledby="habits-title">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Rotas</p>
+                <h2 id="habits-title">Hábitos</h2>
               </div>
+              <button id="editHabitButton" class="icon-button" type="button" aria-label="Editar hábito selecionado" title="Editar hábito">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
+              </button>
+            </div>
+            <div id="habitList" class="habit-list"></div>
+          </section>
 
-              <label class="field-group">
-                <span>Ação mínima</span>
-                <input id="habitMinimum" name="minimum" type="text" maxlength="72" placeholder="Ex.: abrir o livro por 2 minutos" />
-              </label>
-
-              <div class="form-grid two">
-                <label class="field-group">
-                  <span>Gatilho</span>
-                  <input id="habitCue" name="cue" type="text" maxlength="72" placeholder="Ex.: depois do café" />
-                </label>
-
-                <label class="field-group">
-                  <span>Recompensa</span>
-                  <input id="habitReward" name="reward" type="text" maxlength="72" placeholder="Ex.: marcar no mapa" />
-                </label>
-              </div>
-
-              <label class="field-group">
-                <span>Ambiente favorável</span>
-                <input id="habitEnvironment" name="environment" type="text" maxlength="96" placeholder="Ex.: deixar o livro visível na mesa" />
-              </label>
-
-              <div class="form-grid two">
-                <label class="field-group">
-                  <span>Frequência</span>
-                  <select id="habitFrequency" name="frequency">
-                    <option value="daily">Todos os dias</option>
-                    <option value="weekdays">Dias úteis</option>
-                    <option value="custom">Dias específicos</option>
-                  </select>
-                </label>
-
-                <label class="field-group">
-                  <span>Meta de repetições</span>
-                  <input id="habitTarget" name="target" type="number" min="7" max="180" value="66" />
-                </label>
-              </div>
-
-              <fieldset class="weekday-picker" id="weekdayPicker">
-                <legend>Dias específicos</legend>
-                <label><input type="checkbox" value="1" /> Seg</label>
-                <label><input type="checkbox" value="2" /> Ter</label>
-                <label><input type="checkbox" value="3" /> Qua</label>
-                <label><input type="checkbox" value="4" /> Qui</label>
-                <label><input type="checkbox" value="5" /> Sex</label>
-                <label><input type="checkbox" value="6" /> Sáb</label>
-                <label><input type="checkbox" value="0" /> Dom</label>
-              </fieldset>
-
-              <div class="slider-grid">
-                <label class="range-group">
-                  <span>Esforço inicial</span>
-                  <input id="habitFriction" name="friction" type="range" min="1" max="5" value="3" />
-                  <output id="frictionOutput">3</output>
-                </label>
-                <label class="range-group">
-                  <span>Sensibilidade à pausa</span>
-                  <input id="habitDecay" name="decay" type="range" min="1" max="5" value="3" />
-                  <output id="decayOutput">3</output>
-                </label>
-              </div>
-
-              <div class="form-actions">
-                <button class="primary-button" type="submit">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V7l4-4h10l4 4v12a2 2 0 0 1-2 2Z" /><path d="M7 21v-8h10v8M7 3v5h8" /></svg>
-                  Salvar rota
-                </button>
-                <button id="resetFormButton" class="ghost-button" type="button">Limpar</button>
-              </div>
-            </form>
-          </article>
-
-          <article class="calendar-panel" aria-labelledby="calendar-title">
+          <section class="calendar-panel" aria-labelledby="calendar-title">
             <div class="section-heading">
               <div>
                 <p class="eyebrow">Memória</p>
@@ -247,47 +143,163 @@
             </div>
             <div id="calendarGrid" class="calendar-grid" aria-label="Histórico do hábito selecionado"></div>
             <div class="loop-card" id="loopCard"></div>
-          </article>
-        </section>
-
-        <section class="principles-panel" aria-labelledby="principles-title">
-          <div>
-            <p class="eyebrow">Base conceitual</p>
-            <h2 id="principles-title">O app traduz repetição em paisagem</h2>
-          </div>
-          <div class="principle-grid">
-            <article>
-              <strong>Gatilho claro</strong>
-              <span>O hábito fica ligado a um contexto reconhecível.</span>
-            </article>
-            <article>
-              <strong>Ação mínima</strong>
-              <span>Começar pequeno reduz a fricção inicial.</span>
-            </article>
-            <article>
-              <strong>Recompensa imediata</strong>
-              <span>O check-in cria reforço positivo e memória visual.</span>
-            </article>
-            <article>
-              <strong>Repetição paciente</strong>
-              <span>A estrada cresce com constância, não com pressa.</span>
-            </article>
-          </div>
-          <details class="source-drawer">
-            <summary>Fontes usadas como referência</summary>
-            <div class="source-links">
-              <a href="https://www.psicologiasemmitos.com.br/post/neuroplasticidade-como-o-cerebro-transforma-habitos-antigos" target="_blank" rel="noreferrer">Psicologia sem Mitos</a>
-              <a href="https://vidanatural.org.br/2023/07/05/neuroplasticidade-e-mudanca-de-habitos/" target="_blank" rel="noreferrer">Vida Natural</a>
-              <a href="https://i5s.com.br/treinando-o-cerebro-neuroplasticidade-em-habitos-diarios/" target="_blank" rel="noreferrer">i5s</a>
-              <a href="https://academiadopsicologo.com.br/a-neurociencia-dos-habitos/" target="_blank" rel="noreferrer">Academia do Psicólogo</a>
-              <a href="https://www.ppow.com.br/67781-2/" target="_blank" rel="noreferrer">PPOW</a>
-              <a href="https://drjo.com.br/neurociencia-comportamental-habitos-ruins/" target="_blank" rel="noreferrer">Dr. Jô</a>
-              <a href="https://www.conectarmentes.com.br/blog/neuroplasticidade-como-reprogramar-seu-cerebro-para-habitos-saudaveis" target="_blank" rel="noreferrer">Conectar Mentes</a>
-            </div>
-          </details>
-        </section>
+          </section>
+        </aside>
       </main>
+
+      <section class="principles-panel" aria-labelledby="principles-title">
+        <div>
+          <p class="eyebrow">Base conceitual</p>
+          <h2 id="principles-title">O app traduz repetição em paisagem</h2>
+        </div>
+        <div class="principle-grid">
+          <article>
+            <strong>Gatilho claro</strong>
+            <span>O hábito fica ligado a um contexto reconhecível.</span>
+          </article>
+          <article>
+            <strong>Ação mínima</strong>
+            <span>Começar pequeno reduz a fricção inicial.</span>
+          </article>
+          <article>
+            <strong>Recompensa imediata</strong>
+            <span>O check-in cria reforço positivo e memória visual.</span>
+          </article>
+          <article>
+            <strong>Repetição paciente</strong>
+            <span>A estrada cresce com constância, não com pressa.</span>
+          </article>
+        </div>
+      </section>
     </div>
+
+    <dialog id="habitDialog" class="habit-dialog" aria-labelledby="builder-title">
+      <form id="habitForm" class="habit-form" method="dialog">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">Arquitetura do loop</p>
+            <h2 id="builder-title">Criador de hábito</h2>
+          </div>
+          <button id="closeHabitDialogButton" class="icon-button dark" type="button" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div class="habit-template-grid" aria-label="Modelos rápidos de hábito">
+          <button class="template-chip" type="button" data-template="corpo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19V5M18 19V5M3 8h4M17 8h4M7 16h10" /></svg>
+            Corpo
+          </button>
+          <button class="template-chip" type="button" data-template="mente">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 0 0-7 7v4a3 3 0 0 0 3 3h1v-7H5M12 5a7 7 0 0 1 7 7v4a3 3 0 0 1-3 3h-1v-7h4" /></svg>
+            Mente
+          </button>
+          <button class="template-chip" type="button" data-template="foco">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" /><path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" /><path d="M12 12h.01" /></svg>
+            Foco
+          </button>
+          <button class="template-chip" type="button" data-template="estudo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M4 4v15.5A2.5 2.5 0 0 1 6.5 22H20V4Z" /></svg>
+            Estudo
+          </button>
+        </div>
+
+        <label class="field-group">
+          <span>Nome do hábito</span>
+          <input id="habitName" name="name" type="text" maxlength="48" required placeholder="Ex.: Ler 10 páginas" />
+        </label>
+
+        <div class="form-grid two">
+          <label class="field-group">
+            <span>Área</span>
+            <select id="habitArea" name="area">
+              <option value="corpo">Corpo</option>
+              <option value="mente">Mente</option>
+              <option value="foco">Foco</option>
+              <option value="estudo">Estudo</option>
+              <option value="social">Social</option>
+              <option value="casa">Casa</option>
+            </select>
+          </label>
+
+          <label class="field-group">
+            <span>Cor da rota</span>
+            <input id="habitColor" name="color" type="color" value="#d28a3c" />
+          </label>
+        </div>
+
+        <label class="field-group">
+          <span>Ação mínima</span>
+          <input id="habitMinimum" name="minimum" type="text" maxlength="72" placeholder="Ex.: abrir o livro por 2 minutos" />
+        </label>
+
+        <div class="form-grid two">
+          <label class="field-group">
+            <span>Gatilho</span>
+            <input id="habitCue" name="cue" type="text" maxlength="72" placeholder="Ex.: depois do café" />
+          </label>
+
+          <label class="field-group">
+            <span>Recompensa</span>
+            <input id="habitReward" name="reward" type="text" maxlength="72" placeholder="Ex.: marcar no mapa" />
+          </label>
+        </div>
+
+        <label class="field-group">
+          <span>Ambiente favorável</span>
+          <input id="habitEnvironment" name="environment" type="text" maxlength="96" placeholder="Ex.: deixar o livro visível na mesa" />
+        </label>
+
+        <div class="form-grid two">
+          <label class="field-group">
+            <span>Frequência</span>
+            <select id="habitFrequency" name="frequency">
+              <option value="daily">Todos os dias</option>
+              <option value="weekdays">Dias úteis</option>
+              <option value="custom">Dias específicos</option>
+            </select>
+          </label>
+
+          <label class="field-group">
+            <span>Meta de repetições</span>
+            <input id="habitTarget" name="target" type="number" min="7" max="180" value="66" />
+          </label>
+        </div>
+
+        <fieldset class="weekday-picker" id="weekdayPicker">
+          <legend>Dias específicos</legend>
+          <label><input type="checkbox" value="1" /> Seg</label>
+          <label><input type="checkbox" value="2" /> Ter</label>
+          <label><input type="checkbox" value="3" /> Qua</label>
+          <label><input type="checkbox" value="4" /> Qui</label>
+          <label><input type="checkbox" value="5" /> Sex</label>
+          <label><input type="checkbox" value="6" /> Sáb</label>
+          <label><input type="checkbox" value="0" /> Dom</label>
+        </fieldset>
+
+        <div class="slider-grid">
+          <label class="range-group">
+            <span>Esforço inicial</span>
+            <input id="habitFriction" name="friction" type="range" min="1" max="5" value="3" />
+            <output id="frictionOutput">3</output>
+          </label>
+          <label class="range-group">
+            <span>Sensibilidade à pausa</span>
+            <input id="habitDecay" name="decay" type="range" min="1" max="5" value="3" />
+            <output id="decayOutput">3</output>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V7l4-4h10l4 4v12a2 2 0 0 1-2 2Z" /><path d="M7 21v-8h10v8M7 3v5h8" /></svg>
+            Salvar rota
+          </button>
+          <button id="resetFormButton" class="ghost-button" type="button">Restaurar</button>
+          <button id="deleteHabitButton" class="ghost-button danger" type="button">Excluir</button>
+        </div>
+      </form>
+    </dialog>
 
     <template id="emptyStateTemplate">
       <div class="empty-state">

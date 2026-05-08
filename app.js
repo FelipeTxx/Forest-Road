@@ -72,7 +72,13 @@ const elements = {
   syncLocalButton: document.querySelector("#syncLocalButton"),
   signOutButton: document.querySelector("#signOutButton"),
   syncStatus: document.querySelector("#syncStatus"),
+  profileButton: document.querySelector("#profileButton"),
+  profilePopover: document.querySelector("#profilePopover"),
   newHabitButton: document.querySelector("#newHabitButton"),
+  editHabitButton: document.querySelector("#editHabitButton"),
+  habitDialog: document.querySelector("#habitDialog"),
+  closeHabitDialogButton: document.querySelector("#closeHabitDialogButton"),
+  templateButtons: [...document.querySelectorAll(".template-chip")],
   deleteHabitButton: document.querySelector("#deleteHabitButton"),
   habitForm: document.querySelector("#habitForm"),
   habitName: document.querySelector("#habitName"),
@@ -129,13 +135,41 @@ function bindEvents() {
   elements.googleSignInButton.addEventListener("click", signInWithGoogle);
   elements.signOutButton.addEventListener("click", signOutOfGoogle);
   elements.syncLocalButton.addEventListener("click", syncLocalSnapshotToCloud);
+  elements.profileButton.addEventListener("click", toggleProfilePopover);
+  document.addEventListener("click", closeProfilePopoverOnOutsideClick);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeProfilePopover();
+  });
 
   elements.newHabitButton.addEventListener("click", () => {
     editingId = null;
     fillForm(null);
-    elements.habitName.focus();
     renderHabitList();
     renderDeleteButton();
+    openHabitDialog();
+  });
+
+  elements.editHabitButton.addEventListener("click", () => {
+    const habit = getSelectedHabit();
+    if (!habit) {
+      editingId = null;
+      fillForm(null);
+    } else {
+      editingId = habit.id;
+      fillForm(habit);
+    }
+    renderDeleteButton();
+    openHabitDialog();
+  });
+
+  elements.closeHabitDialogButton.addEventListener("click", closeHabitDialog);
+
+  elements.habitDialog.addEventListener("click", (event) => {
+    if (event.target === elements.habitDialog) closeHabitDialog();
+  });
+
+  elements.templateButtons.forEach((button) => {
+    button.addEventListener("click", () => applyHabitTemplate(button.dataset.template));
   });
 
   elements.resetFormButton.addEventListener("click", () => {
@@ -157,6 +191,7 @@ function bindEvents() {
     saveState();
     fillForm(getHabit(editingId));
     render();
+    closeHabitDialog();
     showToast("Rota removida da floresta.");
   });
 
@@ -208,6 +243,7 @@ function bindEvents() {
     saveState();
     fillForm(getHabit(editingId));
     render();
+    closeHabitDialog();
   });
 
   elements.habitFrequency.addEventListener("change", updateWeekdayVisibility);
@@ -820,7 +856,7 @@ function renderHud() {
     const doneToday = state.habits.filter((habitItem) => habitItem.logs[getTodayISO()] === "done").length;
     elements.forestHud.innerHTML = `
       <div class="hud-card">
-        <strong>Bosque de ${state.habits.length} rotas</strong>
+        <strong>Todas as rotas · ${state.habits.length} hábitos</strong>
         <span>Cada estrada segue um desenho próprio. Rotas fortes abrem clareiras; rotas pausadas recebem brotos e galhos sobre o caminho.</span>
       </div>
       <div class="hud-pill">${doneToday}/${state.habits.length || 0} hoje · ${Math.round(average)}% médio</div>
@@ -854,6 +890,7 @@ function renderDeleteButton() {
   const exists = Boolean(getHabit(editingId));
   elements.deleteHabitButton.disabled = !exists;
   elements.deleteHabitButton.style.visibility = exists ? "visible" : "hidden";
+  elements.editHabitButton.disabled = !getSelectedHabit();
 }
 
 function selectHabit(id) {
@@ -862,6 +899,113 @@ function selectHabit(id) {
   saveState();
   fillForm(getHabit(id));
   render();
+}
+
+function openHabitDialog() {
+  if (typeof elements.habitDialog.showModal === "function") {
+    elements.habitDialog.showModal();
+  } else {
+    elements.habitDialog.setAttribute("open", "");
+  }
+  window.setTimeout(() => elements.habitName.focus(), 60);
+}
+
+function closeHabitDialog() {
+  if (elements.habitDialog.open) {
+    elements.habitDialog.close();
+  } else {
+    elements.habitDialog.removeAttribute("open");
+  }
+}
+
+function toggleProfilePopover(event) {
+  event.stopPropagation();
+  const willOpen = elements.profilePopover.hidden;
+  elements.profilePopover.hidden = !willOpen;
+  elements.profileButton.setAttribute("aria-expanded", String(willOpen));
+}
+
+function closeProfilePopover() {
+  elements.profilePopover.hidden = true;
+  elements.profileButton.setAttribute("aria-expanded", "false");
+}
+
+function closeProfilePopoverOnOutsideClick(event) {
+  if (elements.profilePopover.hidden) return;
+  if (event.target.closest(".profile-menu")) return;
+  closeProfilePopover();
+}
+
+function applyHabitTemplate(template) {
+  const templates = {
+    corpo: {
+      area: "corpo",
+      color: "#d28a3c",
+      minimum: "calçar o tênis e começar por 5 minutos",
+      cue: "depois do primeiro copo de água",
+      reward: "marcar a rota no mapa",
+      environment: "deixar roupa ou tênis visível",
+      friction: 2,
+      decay: 3,
+    },
+    mente: {
+      area: "mente",
+      color: "#8ab5c4",
+      minimum: "abrir o livro ou meditar por 2 minutos",
+      cue: "depois de desligar uma tela",
+      reward: "anotar uma frase curta",
+      environment: "deixar o material pronto no local certo",
+      friction: 3,
+      decay: 4,
+    },
+    foco: {
+      area: "foco",
+      color: "#8f4d68",
+      minimum: "15 minutos sem abas extras",
+      cue: "primeiro bloco livre do dia",
+      reward: "pausa curta sem tela",
+      environment: "notificações desligadas",
+      frequency: "weekdays",
+      friction: 4,
+      decay: 3,
+    },
+    estudo: {
+      area: "estudo",
+      color: "#7fa861",
+      minimum: "resolver uma questão ou revisar uma página",
+      cue: "após organizar a mesa",
+      reward: "registrar o avanço no mapa",
+      environment: "deixar caderno e material abertos",
+      frequency: "weekdays",
+      friction: 3,
+      decay: 3,
+    },
+  };
+
+  const data = templates[template];
+  if (!data) return;
+
+  if (!elements.habitName.value.trim()) {
+    const names = {
+      corpo: "Movimento diário",
+      mente: "Cuidar da mente",
+      foco: "Bloco de foco",
+      estudo: "Estudo consistente",
+    };
+    elements.habitName.value = names[template] || "";
+  }
+
+  elements.habitArea.value = data.area || elements.habitArea.value;
+  elements.habitColor.value = data.color || elements.habitColor.value;
+  elements.habitMinimum.value = data.minimum || elements.habitMinimum.value;
+  elements.habitCue.value = data.cue || elements.habitCue.value;
+  elements.habitReward.value = data.reward || elements.habitReward.value;
+  elements.habitEnvironment.value = data.environment || elements.habitEnvironment.value;
+  elements.habitFrequency.value = data.frequency || elements.habitFrequency.value;
+  elements.habitFriction.value = data.friction || elements.habitFriction.value;
+  elements.habitDecay.value = data.decay || elements.habitDecay.value;
+  updateWeekdayVisibility();
+  updateRangeOutputs();
 }
 
 function fillForm(habit) {
